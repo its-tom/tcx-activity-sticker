@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Sticker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.4;
+        }
+
+        .appContainer {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .welcomeArea {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .lblExample {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .miniCanvasWrapper {
+            width: 240px;
+            height: 300px;
+            margin: 0 auto 30px auto;
+            background-color: #1e293b;
+            background-image: repeating-linear-gradient(45deg, #0f172a 25%, transparent 25%, transparent 75%, #0f172a 75%, #0f172a), repeating-linear-gradient(45deg, #0f172a 25%, #1e293b 25%, #1e293b 75%, #0f172a 75%, #0f172a);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+            border-radius: 14px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .uploadBtn {
+            background-color: #fc4c02;
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 25px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(252, 76, 2, 0.3);
+        }
+
+        .uploadBtn:hover {
+            transform: translateY(-2px);
+            background-color: #e34402;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .instructionBox {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+
+        .instructionBox strong {
+            color: #e2e8f0;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .mainContent {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (min-width: 900px) {
+            .mainContent {
+                grid-template-columns: 1.3fr 1fr;
+            }
+
+            .previewArea {
+                position: sticky;
+                top: 15px;
+            }
+        }
+
+        .controlCard {
+            background-color: #1e293b;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border: 1px solid #334155;
+        }
+
+        .controlCard h2 {
+            margin-top: 0;
+            font-size: 0.95rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controlGroup {
+            margin-bottom: 12px;
+        }
+
+        .controlGroup:last-child {
+            margin-bottom: 0;
+        }
+
+        .controlGroup label.headerLabel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .controlGroup label span.valLabel {
+            color: #fc4c02;
+            font-weight: 700;
+        }
+
+        select,
+        input[type="range"] {
+            width: 100%;
+            border: none;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-size: 0.9rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 6 8 10 12 6'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            cursor: pointer;
+            border: 1px solid #334155;
+            transition: border-color 0.2s;
+        }
+
+        select:hover {
+            border-color: #475569;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #fc4c02;
+        }
+
+        input[type="range"] {
+            appearance: none;
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
+            outline: none;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fc4c02;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffffff;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .statsCheckboxGroup {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .statsCheckboxGroup label {
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #94a3b8;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .statsCheckboxGroup label:hover {
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        .statsCheckboxGroup input {
+            display: none;
+        }
+
+        .statsCheckboxGroup label:has(input:checked) {
+            background: #fc4c02;
+            border-color: #fc4c02;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(252, 76, 2, 0.2);
+        }
+
+        .canvasWrapper {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            max-height: 85vh;
+            background-color: #1e293b;
+            background-image: repeating-linear-gradient(45deg, #0f172a 25%, transparent 25%, transparent 75%, #0f172a 75%, #0f172a), repeating-linear-gradient(45deg, #0f172a 25%, #1e293b 25%, #1e293b 75%, #0f172a 75%, #0f172a);
+            background-position: 0 0, 15px 15px;
+            background-size: 30px 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            padding: 15px;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+        }
+
+        @keyframes pulseOrange {
+            0% {
+                box-shadow: 0 0 0 0 rgba(252, 76, 2, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(252, 76, 2, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(252, 76, 2, 0);
+            }
+        }
+
+        .downloadBtn {
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid #fc4c02;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+            animation: pulseOrange 2s infinite;
+        }
+
+        .downloadBtn:hover {
+            background-color: #1e293b;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="appContainer">
+        <h1 id="appTitle">Activity Sticker</h1>
+
+        <div class="welcomeArea" id="welcomeArea">
+            <div class="lblExample" id="lblExample">Example:</div>
+
+            <div class="miniCanvasWrapper">
+                <canvas id="miniCanvas" width="240" height="300"></canvas>
+            </div>
+
+            <label class="uploadBtn" id="uploadLabel">
+                <span id="uploadLabelText">Import TCX file</span>
+                <input type="file" id="fileInput" accept=".tcx">
+            </label>
+
+            <div class="instructionBox" id="instructionBox">
+                <strong id="instructionTitle">How to export your TCX file:</strong><br>
+                <span id="instructionDesc">Select your training in the app > three dot menu > Export</span>
+            </div>
+        </div>
+
+        <div class="mainContent" id="mainContent">
+
+            <div class="previewArea">
+                <div class="canvasWrapper">
+                    <canvas id="routeCanvas" width="1080" height="1350"></canvas>
+                </div>
+            </div>
+
+            <div class="controlsArea">
+
+                <div class="controlCard">
+                    <h2 id="headAppearance">Appearance</h2>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel" id="lblLang">Sprache / Language</label>
+                        <select id="languageSelect">
+                            <option value="en" selected>English</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel" id="lblTheme">Theme Profile</label>
+                        <select id="themeSelect">
+                            <option value="orange" id="optThemeOrange">Athletic (Orange)</option>
+                            <option value="blue" id="optThemeBlue">Classic (Blue)</option>
+                        </select>
+                    </div>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel" id="lblLayout">Text Layout</label>
+                        <select id="layoutSelect">
+                            <option value="unten_2" id="optLayBot2">Text bottom (2 Columns)</option>
+                            <option value="unten_1" id="optLayBot1">Text bottom (Centered)</option>
+                            <option value="oben_2" id="optLayTop2">Text top (2 Columns)</option>
+                            <option value="oben_1" id="optLayTop1">Text top (Centered)</option>
+                        </select>
+                    </div>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel" id="lblColor">Text Color</label>
+                        <select id="textColorSelect">
+                            <option value="white" id="optColorWhite" selected>White</option>
+                            <option value="black" id="optColorBlack">Black</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="controlCard">
+                    <h2 id="headProportions">Proportions</h2>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel">
+                            <span id="lblScaleTxt">Map Size</span>
+                            <span class="valLabel" id="routeScaleLabel">95%</span>
+                        </label>
+                        <input type="range" id="routeScaleSlider" min="30" max="100" value="95">
+                    </div>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel">
+                            <span id="lblWidthTxt">Line Width</span>
+                            <span class="valLabel" id="lineWidthLabel">14px</span>
+                        </label>
+                        <input type="range" id="lineWidthSlider" min="5" max="40" value="14">
+                    </div>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel">
+                            <span id="lblSizeTxt">Text Size</span>
+                            <span class="valLabel" id="textSizeLabel">50px</span>
+                        </label>
+                        <input type="range" id="textSizeSlider" min="30" max="90" value="50">
+                    </div>
+                </div>
+
+                <div class="controlCard">
+                    <h2 id="headStatistics">Statistics</h2>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel" id="lblType">Activity Type</label>
+                        <select id="activitySelect">
+                            <option value="bike" id="optTypeBike">Cycling (km/h)</option>
+                            <option value="run" id="optTypeRun">Running (min/km)</option>
+                        </select>
+                    </div>
+
+                    <div class="controlGroup">
+                        <label class="headerLabel" id="lblData">Visible Data Points</label>
+                        <div class="statsCheckboxGroup" id="dynamicCheckboxes">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="downloadBtn" id="downloadBtn">Save final image</button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const i18n = {
+            de: {
+                appTitle: "Activity Sticker",
+                uploadBtn: "TCX Datei importieren",
+                instructionTitle: "So exportierst du deine TCX Datei:",
+                instructionDesc: "Training in der App auswählen > drei Punkte Menü > Exportieren",
+                lblExample: "Beispiel:",
+                appearance: "Erscheinungsbild",
+                lblLang: "Sprache",
+                lblTheme: "Design Profil",
+                themeOrange: "Athletik (Orange)",
+                themeBlue: "Klassisch (Blau)",
+                lblLayout: "Text Layout",
+                layBot2: "Text unten (2 Spalten)",
+                layBot1: "Text unten (Zentriert)",
+                layTop2: "Text oben (2 Spalten)",
+                layTop1: "Text oben (Zentriert)",
+                lblColor: "Textfarbe",
+                colorWhite: "Weiß",
+                colorBlack: "Schwarz",
+                proportions: "Proportionen",
+                lblScale: "Kartengröße",
+                lblWidth: "Liniendicke",
+                lblSize: "Schriftgröße",
+                statistics: "Statistiken",
+                lblType: "Aktivitätstyp",
+                typeBike: "Radfahren (km/h)",
+                typeRun: "Laufen (min/km)",
+                lblData: "Sichtbare Datenpunkte",
+                downloadBtn: "Fertiges Bild speichern",
+                statDist: "Distanz",
+                statDur: "Dauer",
+                statPace: "Pace / Tempo",
+                statElev: "Höhenmeter",
+                statHr: "Puls",
+                statCal: "Kalorien",
+                valSpeed: "Geschwindigkeit",
+                valPace: "Pace"
+            },
+            en: {
+                appTitle: "Activity Sticker",
+                uploadBtn: "Import TCX file",
+                instructionTitle: "How to export your TCX file:",
+                instructionDesc: "Select your training in the app > three dot menu > Export",
+                lblExample: "Example:",
+                appearance: "Appearance",
+                lblLang: "Language",
+                lblTheme: "Theme Profile",
+                themeOrange: "Athletic (Orange)",
+                themeBlue: "Classic (Blue)",
+                lblLayout: "Text Layout",
+                layBot2: "Text bottom (2 Columns)",
+                layBot1: "Text bottom (Centered)",
+                layTop2: "Text top (2 Columns)",
+                layTop1: "Text top (Centered)",
+                lblColor: "Text Color",
+                colorWhite: "White",
+                colorBlack: "Black",
+                proportions: "Proportions",
+                lblScale: "Map Size",
+                lblWidth: "Line Width",
+                lblSize: "Text Size",
+                statistics: "Statistics",
+                lblType: "Activity Type",
+                typeBike: "Cycling (km/h)",
+                typeRun: "Running (min/km)",
+                lblData: "Visible Data Points",
+                downloadBtn: "Save final image",
+                statDist: "Distance",
+                statDur: "Duration",
+                statPace: "Pace / Speed",
+                statElev: "Elevation",
+                statHr: "Heart Rate",
+                statCal: "Calories",
+                valSpeed: "Speed",
+                valPace: "Pace"
+            }
+        };
+
+        const fileInput = document.getElementById('fileInput');
+        const welcomeArea = document.getElementById('welcomeArea');
+        const mainContent = document.getElementById('mainContent');
+        const canvas = document.getElementById('routeCanvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const dynamicCheckboxes = document.getElementById('dynamicCheckboxes');
+
+        const languageSelect = document.getElementById('languageSelect');
+        const themeSelect = document.getElementById('themeSelect');
+        const layoutSelect = document.getElementById('layoutSelect');
+        const textColorSelect = document.getElementById('textColorSelect');
+        const activitySelect = document.getElementById('activitySelect');
+        const textSizeSlider = document.getElementById('textSizeSlider');
+        const textSizeLabel = document.getElementById('textSizeLabel');
+        const lineWidthSlider = document.getElementById('lineWidthSlider');
+        const lineWidthLabel = document.getElementById('lineWidthLabel');
+        const routeScaleSlider = document.getElementById('routeScaleSlider');
+        const routeScaleLabel = document.getElementById('routeScaleLabel');
+
+        let globalCoords = [];
+        let extractedStats = {};
+
+        const themes = {
+            orange: {
+                line: '#fc4c02',
+                text: '#121212',
+                subtext: '#666666',
+                font: 'BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
+            },
+            blue: {
+                line: '#1a73e8',
+                text: '#202124',
+                subtext: '#5f6368',
+                font: '"Product Sans", Roboto, Arial, sans-serif'
+            }
+        };
+
+        function drawMiniExample() {
+            const mCanvas = document.getElementById('miniCanvas');
+            if (!mCanvas) return;
+            const mCtx = mCanvas.getContext('2d');
+
+            mCtx.clearRect(0, 0, 240, 300);
+
+            mCtx.beginPath();
+            mCtx.strokeStyle = '#fc4c02';
+            mCtx.lineWidth = 8;
+            mCtx.lineCap = "round";
+            mCtx.lineJoin = "round";
+
+            const pts = [
+                [50, 180], [45, 140], [60, 110], [55, 70], [90, 50], [140, 40],
+                [180, 60], [200, 100], [180, 140], [140, 170], [100, 160], [70, 190], [50, 180]
+            ];
+            mCtx.moveTo(pts[0][0], pts[0][1]);
+            for (let i = 1; i < pts.length; i++) {
+                mCtx.lineTo(pts[i][0], pts[i][1]);
+            }
+            mCtx.stroke();
+
+            const lang = languageSelect.value;
+            const t = i18n[lang];
+
+            mCtx.textAlign = "left";
+            mCtx.fillStyle = '#cccccc';
+            mCtx.font = 'normal 12px "Segoe UI", Arial, sans-serif';
+            mCtx.fillText(t.statDist, 24, 240);
+            mCtx.fillText(t.statDur, 130, 240);
+
+            mCtx.fillStyle = '#ffffff';
+            mCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
+            mCtx.fillText('34.86 km', 24, 265);
+            mCtx.fillText('1h 55m', 130, 265);
+        }
+
+        languageSelect.addEventListener('change', () => {
+            updateLanguageUI();
+            if (globalCoords.length > 0) {
+                buildCheckboxes();
+                updateCanvas();
+            }
+        });
+
+        themeSelect.addEventListener('change', updateCanvas);
+        layoutSelect.addEventListener('change', updateCanvas);
+        textColorSelect.addEventListener('change', updateCanvas);
+        activitySelect.addEventListener('change', updateCanvas);
+
+        textSizeSlider.addEventListener('input', (e) => {
+            textSizeLabel.textContent = e.target.value + 'px';
+            updateCanvas();
+        });
+
+        lineWidthSlider.addEventListener('input', (e) => {
+            lineWidthLabel.textContent = e.target.value + 'px';
+            updateCanvas();
+        });
+
+        routeScaleSlider.addEventListener('input', (e) => {
+            routeScaleLabel.textContent = e.target.value + '%';
+            updateCanvas();
+        });
+
+        function updateLanguageUI() {
+            const lang = languageSelect.value;
+            const t = i18n[lang];
+
+            document.title = t.appTitle;
+            document.getElementById('appTitle').textContent = t.appTitle;
+            document.getElementById('uploadLabelText').textContent = t.uploadBtn;
+
+            document.getElementById('instructionTitle').textContent = t.instructionTitle;
+            document.getElementById('instructionDesc').textContent = t.instructionDesc;
+            document.getElementById('lblExample').textContent = t.lblExample;
+
+            document.getElementById('headAppearance').textContent = t.appearance;
+            document.getElementById('lblLang').textContent = t.lblLang;
+            document.getElementById('lblTheme').textContent = t.lblTheme;
+            document.getElementById('optThemeOrange').textContent = t.themeOrange;
+            document.getElementById('optThemeBlue').textContent = t.themeBlue;
+
+            document.getElementById('lblLayout').textContent = t.lblLayout;
+            document.getElementById('optLayBot2').textContent = t.layBot2;
+            document.getElementById('optLayBot1').textContent = t.layBot1;
+            document.getElementById('optLayTop2').textContent = t.layTop2;
+            document.getElementById('optLayTop1').textContent = t.layTop1;
+
+            document.getElementById('lblColor').textContent = t.lblColor;
+            document.getElementById('optColorWhite').textContent = t.colorWhite;
+            document.getElementById('optColorBlack').textContent = t.colorBlack;
+
+            document.getElementById('headProportions').textContent = t.proportions;
+            document.getElementById('lblScaleTxt').textContent = t.lblScale;
+            document.getElementById('lblWidthTxt').textContent = t.lblWidth;
+            document.getElementById('lblSizeTxt').textContent = t.lblSize;
+
+            document.getElementById('headStatistics').textContent = t.statistics;
+            document.getElementById('lblType').textContent = t.lblType;
+            document.getElementById('optTypeBike').textContent = t.typeBike;
+            document.getElementById('optTypeRun').textContent = t.typeRun;
+
+            document.getElementById('lblData').textContent = t.lblData;
+            document.getElementById('downloadBtn').textContent = t.downloadBtn;
+
+            drawMiniExample();
+        }
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            welcomeArea.style.display = 'none';
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                parseTCX(e.target.result);
+                buildCheckboxes();
+                mainContent.style.display = 'grid';
+                updateCanvas();
+            };
+            reader.readAsText(file);
+        });
+
+        function parseTCX(xmlText) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+            let totalDistance = 0;
+            let totalTime = 0;
+            let totalCalories = 0;
+
+            const laps = xmlDoc.getElementsByTagName("Lap");
+            for (let i = 0; i < laps.length; i++) {
+                const distNode = laps[i].getElementsByTagName("DistanceMeters")[0];
+                const timeNode = laps[i].getElementsByTagName("TotalTimeSeconds")[0];
+                const calNode = laps[i].getElementsByTagName("Calories")[0];
+                if (distNode) totalDistance += parseFloat(distNode.textContent);
+                if (timeNode) totalTime += parseFloat(timeNode.textContent);
+                if (calNode) totalCalories += parseInt(calNode.textContent);
+            }
+
+            globalCoords = [];
+            let heartRates = [];
+            let elevationGain = 0;
+            let lastAlt = null;
+
+            const trackpoints = xmlDoc.getElementsByTagName("Trackpoint");
+
+            for (let i = 0; i < trackpoints.length; i++) {
+                const tp = trackpoints[i];
+                const latElem = tp.getElementsByTagName("LatitudeDegrees")[0];
+                const lonElem = tp.getElementsByTagName("LongitudeDegrees")[0];
+                const altElem = tp.getElementsByTagName("AltitudeMeters")[0];
+                const hrElem = tp.getElementsByTagName("Value")[0];
+
+                if (latElem && lonElem) {
+                    globalCoords.push({
+                        lat: parseFloat(latElem.textContent),
+                        lon: parseFloat(lonElem.textContent)
+                    });
+                }
+
+                if (altElem) {
+                    let currentAlt = parseFloat(altElem.textContent);
+                    if (lastAlt !== null && currentAlt > lastAlt) {
+                        elevationGain += (currentAlt - lastAlt);
+                    }
+                    lastAlt = currentAlt;
+                }
+
+                if (hrElem) {
+                    heartRates.push(parseInt(hrElem.textContent));
+                }
+            }
+
+            let avgHr = 0;
+            if (heartRates.length > 0) {
+                const sum = heartRates.reduce((a, b) => a + b, 0);
+                avgHr = Math.round(sum / heartRates.length);
+            }
+
+            extractedStats = {
+                distanceMeters: totalDistance,
+                timeSeconds: totalTime,
+                calories: totalCalories,
+                elevation: Math.round(elevationGain),
+                avgHr: avgHr
+            };
+        }
+
+        function buildCheckboxes() {
+            const lang = languageSelect.value;
+            const t = i18n[lang];
+
+            let states = {};
+            if (dynamicCheckboxes.children.length > 0) {
+                ['cb_dist', 'cb_time', 'cb_speed', 'cb_elev', 'cb_hr', 'cb_cal'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) states[id] = el.checked;
+                });
+            } else {
+                states = { cb_dist: true, cb_time: true, cb_speed: true, cb_elev: true, cb_hr: true, cb_cal: false };
+            }
+
+            dynamicCheckboxes.innerHTML = '';
+
+            const availableOptions = [
+                { id: 'cb_dist', label: t.statDist },
+                { id: 'cb_time', label: t.statDur },
+                { id: 'cb_speed', label: t.statPace }
+            ];
+
+            if (extractedStats.elevation > 0) availableOptions.push({ id: 'cb_elev', label: t.statElev });
+            if (extractedStats.avgHr > 0) availableOptions.push({ id: 'cb_hr', label: t.statHr });
+            if (extractedStats.calories > 0) availableOptions.push({ id: 'cb_cal', label: t.statCal });
+
+            availableOptions.forEach(opt => {
+                const lbl = document.createElement('label');
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.id = opt.id;
+                cb.checked = states[opt.id] !== undefined ? states[opt.id] : false;
+                cb.addEventListener('change', updateCanvas);
+
+                lbl.appendChild(cb);
+                const textSpan = document.createElement('span');
+                textSpan.textContent = opt.label;
+                lbl.appendChild(textSpan);
+
+                dynamicCheckboxes.appendChild(lbl);
+            });
+        }
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            return h > 0 ? `${h}h ${m}m` : `${m}m`;
+        }
+
+        function formatPace(secondsPerKm) {
+            const m = Math.floor(secondsPerKm / 60);
+            const s = Math.floor(secondsPerKm % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateCanvas() {
+            if (globalCoords.length === 0) return;
+
+            const lang = languageSelect.value;
+            const t = i18n[lang];
+            const theme = themes[themeSelect.value];
+            const layout = layoutSelect.value;
+            const isWhiteText = textColorSelect.value === 'white';
+            const isRun = activitySelect.value === 'run';
+            const fontSize = parseInt(textSizeSlider.value);
+            const lineWidth = parseInt(lineWidthSlider.value);
+            const routeScale = parseInt(routeScaleSlider.value) / 100;
+
+            const currentTextColor = isWhiteText ? '#ffffff' : theme.text;
+            const currentSubTextColor = isWhiteText ? '#cccccc' : theme.subtext;
+
+            let displayLines = [];
+
+            if (document.getElementById('cb_dist') && document.getElementById('cb_dist').checked) {
+                const km = (extractedStats.distanceMeters / 1000).toFixed(2);
+                displayLines.push({ val: `${km} km`, desc: t.statDist });
+            }
+            if (document.getElementById('cb_time') && document.getElementById('cb_time').checked) {
+                displayLines.push({ val: formatTime(extractedStats.timeSeconds), desc: t.statDur });
+            }
+            if (document.getElementById('cb_speed') && document.getElementById('cb_speed').checked) {
+                if (isRun) {
+                    const secPerKm = extractedStats.timeSeconds / (extractedStats.distanceMeters / 1000);
+                    displayLines.push({ val: `${formatPace(secPerKm)} /km`, desc: t.valPace });
+                } else {
+                    const kmh = (extractedStats.distanceMeters / 1000) / (extractedStats.timeSeconds / 3600);
+                    displayLines.push({ val: `${kmh.toFixed(1)} km/h`, desc: t.valSpeed });
+                }
+            }
+            if (document.getElementById('cb_elev') && document.getElementById('cb_elev').checked) {
+                displayLines.push({ val: `${extractedStats.elevation} m`, desc: t.statElev });
+            }
+            if (document.getElementById('cb_hr') && document.getElementById('cb_hr').checked) {
+                displayLines.push({ val: `${extractedStats.avgHr} bpm`, desc: t.statHr });
+            }
+            if (document.getElementById('cb_cal') && document.getElementById('cb_cal').checked) {
+                displayLines.push({ val: `${extractedStats.calories} kcal`, desc: t.statCal });
+            }
+
+            const padding = 80;
+            const mapAreaSize = 1080 * routeScale;
+
+            let textHeight = padding;
+            const rowHeight2Col = fontSize * 2.2;
+            const rowHeight1Col = fontSize * 2.5;
+
+            if (layout.includes('2')) {
+                if (displayLines.length > 0) textHeight += rowHeight1Col;
+                let subLines = Math.max(0, displayLines.length - 1);
+                textHeight += Math.ceil(subLines / 2) * rowHeight2Col;
+            } else {
+                textHeight += displayLines.length * rowHeight1Col;
+            }
+            textHeight += padding;
+
+            canvas.width = 1080;
+            canvas.height = mapAreaSize + (displayLines.length > 0 ? textHeight : 0);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const mapStartY = layout.includes('oben') && displayLines.length > 0 ? textHeight : 0;
+            const textStartY = layout.includes('oben') ? 0 : mapAreaSize;
+
+            let minLat = globalCoords[0].lat, maxLat = globalCoords[0].lat;
+            let minLon = globalCoords[0].lon, maxLon = globalCoords[0].lon;
+
+            globalCoords.forEach(c => {
+                if (c.lat < minLat) minLat = c.lat;
+                if (c.lat > maxLat) maxLat = c.lat;
+                if (c.lon < minLon) minLon = c.lon;
+                if (c.lon > maxLon) maxLon = c.lon;
+            });
+
+            const mapAreaXStart = (1080 - mapAreaSize) / 2;
+            const mapAreaYStart = mapStartY;
+            const mapAreaYEnd = mapStartY + mapAreaSize;
+
+            const lonDiff = maxLon - minLon;
+            const latDiff = maxLat - minLat;
+
+            const strokePadding = lineWidth + 10;
+            const mapDrawWidth = mapAreaSize - 2 * strokePadding;
+            const mapDrawHeight = mapAreaSize - 2 * strokePadding;
+
+            const scaleX = mapDrawWidth / lonDiff;
+            const scaleY = mapDrawHeight / latDiff;
+            const scale = Math.min(scaleX, scaleY);
+
+            const offsetX = (mapAreaSize - (lonDiff * scale)) / 2;
+            const offsetY = (mapAreaSize - (latDiff * scale)) / 2;
+
+            ctx.beginPath();
+            ctx.strokeStyle = theme.line;
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+
+            globalCoords.forEach((c, index) => {
+                const x = mapAreaXStart + offsetX + (c.lon - minLon) * scale;
+                const y = mapAreaYEnd - offsetY - (c.lat - minLat) * scale;
+
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            if (displayLines.length === 0) return;
+
+            let currentY = textStartY + padding;
+
+            if (layout.includes('2')) {
+                if (displayLines.length > 0) {
+                    const mainLine = displayLines[0];
+                    ctx.textAlign = "left";
+                    ctx.fillStyle = currentSubTextColor;
+                    ctx.font = `normal ${fontSize * 0.7}px ${theme.font}`;
+                    ctx.fillText(mainLine.desc, padding, currentY + fontSize * 0.7);
+
+                    ctx.fillStyle = currentTextColor;
+                    ctx.font = `bold ${fontSize * 1.8}px ${theme.font}`;
+                    ctx.fillText(mainLine.val, padding, currentY + fontSize * 2.3);
+
+                    currentY += rowHeight1Col + padding * 0.5;
+                }
+
+                let colIdx = 0;
+                for (let i = 1; i < displayLines.length; i++) {
+                    const line = displayLines[i];
+                    const xPos = colIdx === 0 ? padding : 1080 / 2 + 40;
+
+                    ctx.textAlign = "left";
+                    ctx.fillStyle = currentSubTextColor;
+                    ctx.font = `normal ${fontSize * 0.6}px ${theme.font}`;
+                    ctx.fillText(line.desc, xPos, currentY + fontSize * 0.6);
+
+                    ctx.fillStyle = currentTextColor;
+                    ctx.font = `bold ${fontSize * 1.1}px ${theme.font}`;
+                    ctx.fillText(line.val, xPos, currentY + fontSize * 1.7);
+
+                    colIdx++;
+                    if (colIdx > 1) {
+                        colIdx = 0;
+                        currentY += rowHeight2Col;
+                    }
+                }
+            } else {
+                for (let i = 0; i < displayLines.length; i++) {
+                    const line = displayLines[i];
+                    ctx.textAlign = "center";
+                    const xPos = 1080 / 2;
+
+                    ctx.fillStyle = currentSubTextColor;
+                    ctx.font = `normal ${fontSize * 0.7}px ${theme.font}`;
+                    ctx.fillText(line.desc, xPos, currentY + fontSize * 0.7);
+
+                    ctx.fillStyle = currentTextColor;
+                    ctx.font = `bold ${fontSize * 1.5}px ${theme.font}`;
+                    ctx.fillText(line.val, xPos, currentY + fontSize * 2.1);
+
+                    currentY += rowHeight1Col;
+                }
+                ctx.textAlign = "left";
+            }
+        }
+
+        downloadBtn.addEventListener('click', function () {
+            const link = document.createElement('a');
+            link.download = 'activity_sticker_transparent.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        // Initialize UI
+        updateLanguageUI();
+    </script>
+</body>
+
+</html>
