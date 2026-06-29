@@ -5,34 +5,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Sticker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #131314;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(66, 133, 244, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(155, 114, 203, 0.12) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: #E3E3E3;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            line-height: 1.4;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .appContainer {
             width: 100%;
             max-width: 1100px;
+            padding-bottom: 40px;
+        }
+
+        .titleContainer {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
         }
 
         h1 {
-            text-align: center;
-            font-size: 1.6rem;
-            margin-bottom: 25px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: 2.2rem;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
             color: #ffffff;
+        }
+
+        .gemini-line {
+            height: 3px;
+            width: 140px;
+            margin: 0 auto;
+            background: linear-gradient(90deg, #4285F4, #9B72CB, #D96570, #4285F4);
+            background-size: 300% 100%;
+            animation: moveGradient 6s linear infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes moveGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
         }
 
         .welcomeArea {
@@ -42,45 +75,52 @@
 
         .lblExample {
             text-align: center;
-            color: #94a3b8;
-            margin-bottom: 12px;
+            color: #C4C7C5;
+            margin-bottom: 16px;
             font-size: 0.95rem;
             font-weight: 500;
         }
 
         .miniCanvasWrapper {
-            width: 240px;
-            height: 300px;
+            width: 220px;
+            height: 275px;
             margin: 0 auto 30px auto;
-            background-color: #1e293b;
-            background-image: repeating-linear-gradient(45deg, #0f172a 25%, transparent 25%, transparent 75%, #0f172a 75%, #0f172a), repeating-linear-gradient(45deg, #0f172a 25%, #1e293b 25%, #1e293b 75%, #0f172a 75%, #0f172a);
-            background-position: 0 0, 10px 10px;
+            background-color: #1E1F20;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 20px 20px;
-            border-radius: 14px;
-            border: 1px solid #334155;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-radius: 24px;
+            border: 1px solid #333538;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
         }
 
         .uploadBtn {
-            background-color: #fc4c02;
-            color: #ffffff;
-            padding: 14px 20px;
-            border-radius: 10px;
+            background-color: #D3E3FD;
+            color: #041E49;
+            padding: 14px 28px;
+            border-radius: 32px;
             cursor: pointer;
             display: block;
             text-align: center;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 1.05rem;
-            transition: transform 0.2s, background-color 0.2s;
-            margin-bottom: 25px;
+            transition: all 0.2s ease;
+            margin-bottom: 24px;
             border: none;
-            box-shadow: 0 4px 12px rgba(252, 76, 2, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .uploadBtn:hover {
-            transform: translateY(-2px);
-            background-color: #e34402;
+            transform: translateY(-1px);
+            background-color: #A8C7FA;
+            box-shadow: 0 4px 12px rgba(168, 199, 250, 0.2);
         }
 
         input[type="file"] {
@@ -90,59 +130,70 @@
         .instructionBox {
             text-align: center;
             font-size: 0.9rem;
-            color: #94a3b8;
-            background-color: #1e293b;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #334155;
+            color: #C4C7C5;
+            background-color: transparent;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px dashed #333538;
         }
 
         .instructionBox strong {
-            color: #e2e8f0;
+            color: #E3E3E3;
             display: inline-block;
             margin-bottom: 6px;
+            font-weight: 600;
         }
 
         .mainContent {
             display: none;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 24px;
             align-items: start;
         }
 
         @media (min-width: 900px) {
             .mainContent {
-                grid-template-columns: 1.3fr 1fr;
+                grid-template-columns: 1.2fr 1fr;
             }
 
             .previewArea {
                 position: sticky;
-                top: 15px;
+                top: 20px;
             }
         }
 
         .controlCard {
-            background-color: #1e293b;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            border: 1px solid #334155;
+            background-color: #1E1F20;
+            padding: 24px;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            border: 1px solid #333538;
+            backdrop-filter: blur(10px);
         }
 
         .controlCard h2 {
             margin-top: 0;
-            font-size: 0.95rem;
-            color: #94a3b8;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #334155;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 1.1rem;
+            color: #E3E3E3;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #333538;
+            font-weight: 500;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
 
         .controlGroup {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .grid-2 .controlGroup {
+            margin-bottom: 0;
         }
 
         .controlGroup:last-child {
@@ -152,55 +203,65 @@
         .controlGroup label.headerLabel {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-size: 0.85rem;
-            color: #e2e8f0;
+            color: #C4C7C5;
             font-weight: 500;
         }
 
         .controlGroup label span.valLabel {
-            color: #fc4c02;
-            font-weight: 700;
+            color: #A8C7FA;
+            font-weight: 600;
         }
 
         select,
         input[type="range"] {
             width: 100%;
             border: none;
+            font-family: inherit;
         }
 
         select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            background-color: #0f172a;
-            color: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background-color: #2E2F32;
+            color: #E3E3E3;
             font-size: 0.9rem;
+            font-weight: 500;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 6 8 10 12 6'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23C4C7C5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 6 8 10 12 6'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 10px center;
+            background-position: right 12px center;
             cursor: pointer;
-            border: 1px solid #334155;
-            transition: border-color 0.2s;
+            border: 1px solid transparent;
+            transition: all 0.2s;
         }
 
         select:hover {
-            border-color: #475569;
+            background-color: #333538;
         }
 
         select:focus {
             outline: none;
-            border-color: #fc4c02;
+            border: 1px solid #A8C7FA;
+        }
+
+        select option {
+            background-color: #1E1F20;
+        }
+
+        select option:disabled {
+            color: #8E8E8E;
         }
 
         input[type="range"] {
             appearance: none;
-            height: 6px;
-            background: #334155;
-            border-radius: 3px;
+            height: 4px;
+            background: #444746;
+            border-radius: 2px;
             outline: none;
-            margin-top: 4px;
-            margin-bottom: 4px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -208,39 +269,83 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            background: #fc4c02;
+            background: #D3E3FD;
             cursor: pointer;
             transition: transform 0.1s;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-            border: 2px solid #ffffff;
         }
 
         input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
+            transform: scale(1.2);
+        }
+
+        .toggleSwitch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #E3E3E3;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .toggleSwitch input {
+            display: none;
+        }
+
+        .slider {
+            width: 40px;
+            height: 22px;
+            background-color: #444746;
+            border-radius: 20px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #E3E3E3;
+            top: 3px;
+            left: 3px;
+            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .toggleSwitch input:checked+.slider {
+            background-color: #A8C7FA;
+        }
+
+        .toggleSwitch input:checked+.slider::before {
+            transform: translateX(18px);
+            background-color: #041E49;
         }
 
         .statsCheckboxGroup {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            margin-top: 4px;
         }
 
         .statsCheckboxGroup label {
-            background: #0f172a;
-            border: 1px solid #334155;
-            padding: 6px 12px;
+            background: #2E2F32;
+            border: 1px solid transparent;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            color: #94a3b8;
+            color: #C4C7C5;
             font-weight: 500;
             transition: all 0.2s ease;
             user-select: none;
         }
 
         .statsCheckboxGroup label:hover {
-            border-color: #475569;
-            color: #e2e8f0;
+            background: #333538;
+            color: #E3E3E3;
         }
 
         .statsCheckboxGroup input {
@@ -248,68 +353,79 @@
         }
 
         .statsCheckboxGroup label:has(input:checked) {
-            background: #fc4c02;
-            border-color: #fc4c02;
-            color: #ffffff;
-            box-shadow: 0 2px 6px rgba(252, 76, 2, 0.2);
+            background: #D3E3FD;
+            color: #041E49;
+            font-weight: 600;
         }
 
         .canvasWrapper {
             width: 100%;
             aspect-ratio: 4 / 5;
             max-height: 85vh;
-            background-color: #1e293b;
-            background-image: repeating-linear-gradient(45deg, #0f172a 25%, transparent 25%, transparent 75%, #0f172a 75%, #0f172a), repeating-linear-gradient(45deg, #0f172a 25%, #1e293b 25%, #1e293b 75%, #0f172a 75%, #0f172a);
-            background-position: 0 0, 15px 15px;
-            background-size: 30px 30px;
-            border-radius: 12px;
-            border: 1px solid #334155;
+            background-color: #131314;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            border-radius: 24px;
+            border: 1px solid #333538;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            padding: 15px;
+            padding: 10px;
+            transition: background 0.2s ease;
         }
 
         canvas {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
         }
 
-        @keyframes pulseOrange {
-            0% {
-                box-shadow: 0 0 0 0 rgba(252, 76, 2, 0.7);
-            }
+        .randomBtn {
+            background-color: #2E2F32;
+            color: #C2E7FF;
+            padding: 12px;
+            border-radius: 100px;
+            cursor: pointer;
+            border: 1px solid #444746;
+            font-size: 0.95rem;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.2s ease;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            letter-spacing: 0.2px;
+        }
 
-            70% {
-                box-shadow: 0 0 0 12px rgba(252, 76, 2, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(252, 76, 2, 0);
-            }
+        .randomBtn:hover {
+            background-color: #333538;
+            border-color: #A8C7FA;
         }
 
         .downloadBtn {
-            background-color: #0f172a;
-            color: #ffffff;
+            background-color: #A8C7FA;
+            color: #041E49;
             padding: 14px;
-            border-radius: 10px;
+            border-radius: 100px;
             cursor: pointer;
-            border: 2px solid #fc4c02;
+            border: none;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             width: 100%;
-            transition: background-color 0.3s, transform 0.2s;
-            animation: pulseOrange 2s infinite;
+            transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+            letter-spacing: 0.1px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .downloadBtn:hover {
-            background-color: #1e293b;
-            transform: translateY(-2px);
+            background-color: #C2E7FF;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(168, 199, 250, 0.3);
+        }
+
+        .downloadBtn:active {
+            transform: translateY(1px);
         }
     </style>
 </head>
@@ -317,13 +433,16 @@
 <body>
 
     <div class="appContainer">
-        <h1 id="appTitle">Activity Sticker</h1>
+        <div class="titleContainer">
+            <h1 id="appTitle">Activity Sticker</h1>
+            <div class="gemini-line"></div>
+        </div>
 
         <div class="welcomeArea" id="welcomeArea">
-            <div class="lblExample" id="lblExample">Example:</div>
+            <div class="lblExample" id="lblExample">Example</div>
 
             <div class="miniCanvasWrapper">
-                <canvas id="miniCanvas" width="240" height="300"></canvas>
+                <canvas id="miniCanvas" width="220" height="275"></canvas>
             </div>
 
             <label class="uploadBtn" id="uploadLabel">
@@ -349,38 +468,57 @@
 
                 <div class="controlCard">
                     <h2 id="headAppearance">Appearance</h2>
-
-                    <div class="controlGroup">
-                        <label class="headerLabel" id="lblLang">Sprache / Language</label>
-                        <select id="languageSelect">
-                            <option value="en" selected>English</option>
-                            <option value="de">Deutsch</option>
-                        </select>
+                    <div class="grid-2">
+                        <div class="controlGroup" id="tgLang">
+                            <label class="headerLabel" id="lblLang">Language</label>
+                            <select id="languageSelect">
+                                <option value="en" selected>English</option>
+                                <option value="de">Deutsch</option>
+                            </select>
+                        </div>
+                        <div class="controlGroup" id="tgTheme">
+                            <label class="headerLabel" id="lblTheme">Theme Profile</label>
+                            <select id="themeSelect">
+                                <option value="orange" id="optThemeOrange">Athletic (Orange)</option>
+                                <option value="blue" id="optThemeBlue">Classic (Blue)</option>
+                                <option value="red" id="optThemeRed">Racing (Red)</option>
+                                <option value="green" id="optThemeGreen">Nature (Green)</option>
+                                <option value="purple" id="optThemePurple">Neon (Purple)</option>
+                                <option value="pink" id="optThemePink">Hot (Pink)</option>
+                                <option value="yellow" id="optThemeYellow">Electric (Yellow)</option>
+                            </select>
+                        </div>
+                        <div class="controlGroup" id="tgFont">
+                            <label class="headerLabel" id="lblFont">Font</label>
+                            <select id="fontSelect">
+                                <option value="inter" id="optFontInter" selected>Inter (Modern)</option>
+                                <option value="system" id="optFontSys">System (Standard)</option>
+                                <option value="sport" id="optFontSport">Sporty (Impact)</option>
+                                <option value="mono" id="optFontMono">Tech (Monospace)</option>
+                                <option value="serif" id="optFontSerif">Classic (Serif)</option>
+                            </select>
+                        </div>
+                        <div class="controlGroup" id="tgColor">
+                            <label class="headerLabel" id="lblColor">Text Color</label>
+                            <select id="textColorSelect">
+                                <option value="white" id="optColorWhite" selected>White</option>
+                                <option value="black" id="optColorBlack">Black</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="controlGroup">
-                        <label class="headerLabel" id="lblTheme">Theme Profile</label>
-                        <select id="themeSelect">
-                            <option value="orange" id="optThemeOrange">Athletic (Orange)</option>
-                            <option value="blue" id="optThemeBlue">Classic (Blue)</option>
-                        </select>
-                    </div>
-
-                    <div class="controlGroup">
+                    <div class="controlGroup" style="margin-top: 16px;" id="tgLayout">
                         <label class="headerLabel" id="lblLayout">Text Layout</label>
                         <select id="layoutSelect">
+                            <option value="unten_3" id="optLayBot3">Text bottom (3 Columns)</option>
                             <option value="unten_2" id="optLayBot2">Text bottom (2 Columns)</option>
                             <option value="unten_1" id="optLayBot1">Text bottom (Centered)</option>
+                            <option value="oben_3" id="optLayTop3">Text top (3 Columns)</option>
                             <option value="oben_2" id="optLayTop2">Text top (2 Columns)</option>
                             <option value="oben_1" id="optLayTop1">Text top (Centered)</option>
-                        </select>
-                    </div>
-
-                    <div class="controlGroup">
-                        <label class="headerLabel" id="lblColor">Text Color</label>
-                        <select id="textColorSelect">
-                            <option value="white" id="optColorWhite" selected>White</option>
-                            <option value="black" id="optColorBlack">Black</option>
+                            <option value="overlay_unten" id="optLayOverBot">Overlay Bottom</option>
+                            <option value="overlay_1" id="optLayOverCen">Overlay Centered</option>
+                            <option value="overlay_oben" id="optLayOverTop">Overlay Top</option>
                         </select>
                     </div>
                 </div>
@@ -388,23 +526,32 @@
                 <div class="controlCard">
                     <h2 id="headProportions">Proportions</h2>
 
-                    <div class="controlGroup">
-                        <label class="headerLabel">
-                            <span id="lblScaleTxt">Map Size</span>
-                            <span class="valLabel" id="routeScaleLabel">95%</span>
+                    <div class="controlGroup" style="margin-bottom: 20px;" id="tgShowMap">
+                        <label class="toggleSwitch">
+                            <input type="checkbox" id="cbShowMap" checked>
+                            <div class="slider"></div>
+                            <span id="lblShowMap">Show Map</span>
                         </label>
-                        <input type="range" id="routeScaleSlider" min="30" max="100" value="95">
                     </div>
 
-                    <div class="controlGroup">
-                        <label class="headerLabel">
-                            <span id="lblWidthTxt">Line Width</span>
-                            <span class="valLabel" id="lineWidthLabel">14px</span>
-                        </label>
-                        <input type="range" id="lineWidthSlider" min="5" max="40" value="14">
+                    <div class="grid-2">
+                        <div class="controlGroup" id="tgScale">
+                            <label class="headerLabel">
+                                <span id="lblScaleTxt">Map Size</span>
+                                <span class="valLabel" id="routeScaleLabel">95%</span>
+                            </label>
+                            <input type="range" id="routeScaleSlider" min="30" max="100" value="95">
+                        </div>
+                        <div class="controlGroup" id="tgWidth">
+                            <label class="headerLabel">
+                                <span id="lblWidthTxt">Line Width</span>
+                                <span class="valLabel" id="lineWidthLabel">14px</span>
+                            </label>
+                            <input type="range" id="lineWidthSlider" min="5" max="40" value="14">
+                        </div>
                     </div>
 
-                    <div class="controlGroup">
+                    <div class="controlGroup" style="margin-top: 16px;" id="tgSize">
                         <label class="headerLabel">
                             <span id="lblSizeTxt">Text Size</span>
                             <span class="valLabel" id="textSizeLabel">50px</span>
@@ -416,7 +563,7 @@
                 <div class="controlCard">
                     <h2 id="headStatistics">Statistics</h2>
 
-                    <div class="controlGroup">
+                    <div class="controlGroup" id="tgType">
                         <label class="headerLabel" id="lblType">Activity Type</label>
                         <select id="activitySelect">
                             <option value="bike" id="optTypeBike">Cycling (km/h)</option>
@@ -424,15 +571,15 @@
                         </select>
                     </div>
 
-                    <div class="controlGroup">
+                    <div class="controlGroup" style="margin-top: 16px;" id="tgData">
                         <label class="headerLabel" id="lblData">Visible Data Points</label>
                         <div class="statsCheckboxGroup" id="dynamicCheckboxes">
                         </div>
                     </div>
                 </div>
 
+                <button class="randomBtn" id="randomBtn">Shuffle Settings</button>
                 <button class="downloadBtn" id="downloadBtn">Save final image</button>
-
             </div>
         </div>
     </div>
@@ -444,21 +591,38 @@
                 uploadBtn: "TCX Datei importieren",
                 instructionTitle: "So exportierst du deine TCX Datei:",
                 instructionDesc: "Training in der App auswählen > drei Punkte Menü > Exportieren",
-                lblExample: "Beispiel:",
+                lblExample: "Beispiel",
                 appearance: "Erscheinungsbild",
                 lblLang: "Sprache",
                 lblTheme: "Design Profil",
                 themeOrange: "Athletik (Orange)",
                 themeBlue: "Klassisch (Blau)",
+                themeRed: "Racing (Rot)",
+                themeGreen: "Natur (Grün)",
+                themePurple: "Neon (Lila)",
+                themePink: "Hot (Pink)",
+                themeYellow: "Electric (Gelb)",
+                lblFont: "Schriftart",
+                fontInter: "Inter (Modern)",
+                fontSys: "System (Standard)",
+                fontSport: "Sportlich (Impact)",
+                fontMono: "Technisch (Monospace)",
+                fontSerif: "Klassisch (Serif)",
                 lblLayout: "Text Layout",
+                layBot3: "Text unten (3 Spalten)",
                 layBot2: "Text unten (2 Spalten)",
                 layBot1: "Text unten (Zentriert)",
+                layTop3: "Text oben (3 Spalten)",
                 layTop2: "Text oben (2 Spalten)",
                 layTop1: "Text oben (Zentriert)",
+                layOverBot: "Overlay Unten (Karte)",
+                layOverCen: "Overlay Zentriert (Karte)",
+                layOverTop: "Overlay Oben (Karte)",
                 lblColor: "Textfarbe",
                 colorWhite: "Weiß",
                 colorBlack: "Schwarz",
                 proportions: "Proportionen",
+                lblShowMap: "Karte anzeigen",
                 lblScale: "Kartengröße",
                 lblWidth: "Liniendicke",
                 lblSize: "Schriftgröße",
@@ -467,6 +631,7 @@
                 typeBike: "Radfahren (km/h)",
                 typeRun: "Laufen (min/km)",
                 lblData: "Sichtbare Datenpunkte",
+                randomBtn: "Optionen durchwürfeln",
                 downloadBtn: "Fertiges Bild speichern",
                 statDist: "Distanz",
                 statDur: "Dauer",
@@ -482,21 +647,38 @@
                 uploadBtn: "Import TCX file",
                 instructionTitle: "How to export your TCX file:",
                 instructionDesc: "Select your training in the app > three dot menu > Export",
-                lblExample: "Example:",
+                lblExample: "Example",
                 appearance: "Appearance",
                 lblLang: "Language",
                 lblTheme: "Theme Profile",
                 themeOrange: "Athletic (Orange)",
                 themeBlue: "Classic (Blue)",
+                themeRed: "Racing (Red)",
+                themeGreen: "Nature (Green)",
+                themePurple: "Neon (Purple)",
+                themePink: "Hot (Pink)",
+                themeYellow: "Electric (Yellow)",
+                lblFont: "Font",
+                fontInter: "Inter (Modern)",
+                fontSys: "System (Standard)",
+                fontSport: "Sporty (Impact)",
+                fontMono: "Tech (Monospace)",
+                fontSerif: "Classic (Serif)",
                 lblLayout: "Text Layout",
+                layBot3: "Text bottom (3 Columns)",
                 layBot2: "Text bottom (2 Columns)",
                 layBot1: "Text bottom (Centered)",
+                layTop3: "Text top (3 Columns)",
                 layTop2: "Text top (2 Columns)",
                 layTop1: "Text top (Centered)",
+                layOverBot: "Overlay Bottom",
+                layOverCen: "Overlay Centered",
+                layOverTop: "Overlay Top",
                 lblColor: "Text Color",
                 colorWhite: "White",
                 colorBlack: "Black",
                 proportions: "Proportions",
+                lblShowMap: "Show Map",
                 lblScale: "Map Size",
                 lblWidth: "Line Width",
                 lblSize: "Text Size",
@@ -505,6 +687,7 @@
                 typeBike: "Cycling (km/h)",
                 typeRun: "Running (min/km)",
                 lblData: "Visible Data Points",
+                randomBtn: "Shuffle Settings",
                 downloadBtn: "Save final image",
                 statDist: "Distance",
                 statDur: "Duration",
@@ -523,10 +706,12 @@
         const canvas = document.getElementById('routeCanvas');
         const ctx = canvas.getContext('2d');
         const downloadBtn = document.getElementById('downloadBtn');
+        const randomBtn = document.getElementById('randomBtn');
         const dynamicCheckboxes = document.getElementById('dynamicCheckboxes');
 
         const languageSelect = document.getElementById('languageSelect');
         const themeSelect = document.getElementById('themeSelect');
+        const fontSelect = document.getElementById('fontSelect');
         const layoutSelect = document.getElementById('layoutSelect');
         const textColorSelect = document.getElementById('textColorSelect');
         const activitySelect = document.getElementById('activitySelect');
@@ -536,61 +721,49 @@
         const lineWidthLabel = document.getElementById('lineWidthLabel');
         const routeScaleSlider = document.getElementById('routeScaleSlider');
         const routeScaleLabel = document.getElementById('routeScaleLabel');
+        const cbShowMap = document.getElementById('cbShowMap');
 
         let globalCoords = [];
         let extractedStats = {};
 
         const themes = {
-            orange: {
-                line: '#fc4c02',
-                text: '#121212',
-                subtext: '#666666',
-                font: 'BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
-            },
-            blue: {
-                line: '#1a73e8',
-                text: '#202124',
-                subtext: '#5f6368',
-                font: '"Product Sans", Roboto, Arial, sans-serif'
-            }
+            orange: { line: '#fc4c02' },
+            blue: { line: '#1a73e8' },
+            red: { line: '#ef4444' },
+            green: { line: '#10b981' },
+            purple: { line: '#a855f7' },
+            pink: { line: '#ec4899' },
+            yellow: { line: '#eab308' }
         };
 
-        function drawMiniExample() {
-            const mCanvas = document.getElementById('miniCanvas');
-            if (!mCanvas) return;
-            const mCtx = mCanvas.getContext('2d');
+        const fonts = {
+            inter: '"Inter", sans-serif',
+            system: 'BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+            sport: 'Impact, "Arial Black", sans-serif',
+            mono: '"Courier New", Courier, monospace',
+            serif: 'Georgia, "Times New Roman", serif'
+        };
 
-            mCtx.clearRect(0, 0, 240, 300);
+        document.fonts.ready.then(function () {
+            adjustPreviewBackground();
+            drawMiniExample();
+            if (globalCoords.length > 0) updateCanvas();
+        });
 
-            mCtx.beginPath();
-            mCtx.strokeStyle = '#fc4c02';
-            mCtx.lineWidth = 8;
-            mCtx.lineCap = "round";
-            mCtx.lineJoin = "round";
+        function adjustPreviewBackground() {
+            const wrappers = [document.querySelector('.canvasWrapper'), document.querySelector('.miniCanvasWrapper')];
+            const isBlackText = textColorSelect.value === 'black';
 
-            const pts = [
-                [50, 180], [45, 140], [60, 110], [55, 70], [90, 50], [140, 40],
-                [180, 60], [200, 100], [180, 140], [140, 170], [100, 160], [70, 190], [50, 180]
-            ];
-            mCtx.moveTo(pts[0][0], pts[0][1]);
-            for (let i = 1; i < pts.length; i++) {
-                mCtx.lineTo(pts[i][0], pts[i][1]);
-            }
-            mCtx.stroke();
-
-            const lang = languageSelect.value;
-            const t = i18n[lang];
-
-            mCtx.textAlign = "left";
-            mCtx.fillStyle = '#cccccc';
-            mCtx.font = 'normal 12px "Segoe UI", Arial, sans-serif';
-            mCtx.fillText(t.statDist, 24, 240);
-            mCtx.fillText(t.statDur, 130, 240);
-
-            mCtx.fillStyle = '#ffffff';
-            mCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-            mCtx.fillText('34.86 km', 24, 265);
-            mCtx.fillText('1h 55m', 130, 265);
+            wrappers.forEach(w => {
+                if (!w) return;
+                if (isBlackText) {
+                    w.style.backgroundColor = '#F0F4F9';
+                    w.style.backgroundImage = 'radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px)';
+                } else {
+                    w.style.backgroundColor = '#131314';
+                    w.style.backgroundImage = 'radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px)';
+                }
+            });
         }
 
         languageSelect.addEventListener('change', () => {
@@ -601,10 +774,45 @@
             }
         });
 
-        themeSelect.addEventListener('change', updateCanvas);
+        function updateOverlayOptions() {
+            const showMap = cbShowMap.checked;
+            const options = layoutSelect.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value.includes('overlay')) {
+                    options[i].hidden = !showMap;
+                    options[i].disabled = !showMap;
+                }
+            }
+            if (!showMap && layoutSelect.value.includes('overlay')) {
+                layoutSelect.value = 'unten_1';
+            }
+        }
+
+        themeSelect.addEventListener('change', () => {
+            drawMiniExample();
+            updateCanvas();
+        });
+
+        fontSelect.addEventListener('change', () => {
+            drawMiniExample();
+            updateCanvas();
+        });
+
         layoutSelect.addEventListener('change', updateCanvas);
-        textColorSelect.addEventListener('change', updateCanvas);
+
+        textColorSelect.addEventListener('change', () => {
+            adjustPreviewBackground();
+            drawMiniExample();
+            updateCanvas();
+        });
+
         activitySelect.addEventListener('change', updateCanvas);
+
+        cbShowMap.addEventListener('change', () => {
+            updateOverlayOptions();
+            drawMiniExample();
+            updateCanvas();
+        });
 
         textSizeSlider.addEventListener('input', (e) => {
             textSizeLabel.textContent = e.target.value + 'px';
@@ -620,6 +828,87 @@
             routeScaleLabel.textContent = e.target.value + '%';
             updateCanvas();
         });
+
+        randomBtn.addEventListener('click', () => {
+            const themeOpts = Array.from(themeSelect.options);
+            themeSelect.value = themeOpts[Math.floor(Math.random() * themeOpts.length)].value;
+
+            const fontOpts = Array.from(fontSelect.options);
+            fontSelect.value = fontOpts[Math.floor(Math.random() * fontOpts.length)].value;
+
+            const colorOpts = Array.from(textColorSelect.options);
+            textColorSelect.value = colorOpts[Math.floor(Math.random() * colorOpts.length)].value;
+
+            cbShowMap.checked = Math.random() > 0.2;
+            updateOverlayOptions();
+
+            const layoutOpts = Array.from(layoutSelect.options).filter(o => !o.disabled && !o.hidden);
+            layoutSelect.value = layoutOpts[Math.floor(Math.random() * layoutOpts.length)].value;
+
+            routeScaleSlider.value = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+            lineWidthSlider.value = Math.floor(Math.random() * (26 - 8 + 1)) + 8;
+            textSizeSlider.value = Math.floor(Math.random() * (70 - 35 + 1)) + 35;
+
+            routeScaleLabel.textContent = routeScaleSlider.value + '%';
+            lineWidthLabel.textContent = lineWidthSlider.value + 'px';
+            textSizeLabel.textContent = textSizeSlider.value + 'px';
+
+            adjustPreviewBackground();
+            drawMiniExample();
+            updateCanvas();
+        });
+
+        function drawMiniExample() {
+            const mCanvas = document.getElementById('miniCanvas');
+            if (!mCanvas) return;
+            const mCtx = mCanvas.getContext('2d');
+
+            mCtx.clearRect(0, 0, 220, 275);
+
+            const themeKey = themeSelect.value || 'orange';
+            const fontKey = fontSelect.value || 'inter';
+            const langKey = languageSelect.value || 'en';
+            const colorKey = textColorSelect.value || 'white';
+
+            const theme = themes[themeKey];
+            const currentFont = fonts[fontKey];
+            const t = i18n[langKey];
+            const isWhiteText = colorKey === 'white';
+            const showMap = cbShowMap.checked;
+
+            if (showMap) {
+                mCtx.beginPath();
+                mCtx.strokeStyle = theme.line;
+                mCtx.lineWidth = 7;
+                mCtx.lineCap = "round";
+                mCtx.lineJoin = "round";
+
+                const pts = [
+                    [40, 160], [35, 120], [50, 90], [45, 60], [80, 40], [130, 30],
+                    [170, 50], [190, 90], [170, 130], [130, 160], [90, 150], [60, 180], [40, 160]
+                ];
+                mCtx.moveTo(pts[0][0], pts[0][1]);
+                for (let i = 1; i < pts.length; i++) {
+                    mCtx.lineTo(pts[i][0], pts[i][1]);
+                }
+                mCtx.stroke();
+            }
+
+            mCtx.textAlign = "left";
+            mCtx.fillStyle = isWhiteText ? '#C4C7C5' : '#666666';
+            mCtx.font = `500 11px ${currentFont}`;
+
+            const yPosSub = showMap ? 220 : 130;
+            const yPosVal = showMap ? 245 : 155;
+
+            mCtx.fillText(t.statDist, 20, yPosSub);
+            mCtx.fillText(t.statDur, 120, yPosSub);
+
+            mCtx.fillStyle = isWhiteText ? '#ffffff' : '#121212';
+            mCtx.font = `700 18px ${currentFont}`;
+            mCtx.fillText('34.86 km', 20, yPosVal);
+            mCtx.fillText('1h 55m', 120, yPosVal);
+        }
 
         function updateLanguageUI() {
             const lang = languageSelect.value;
@@ -638,18 +927,36 @@
             document.getElementById('lblTheme').textContent = t.lblTheme;
             document.getElementById('optThemeOrange').textContent = t.themeOrange;
             document.getElementById('optThemeBlue').textContent = t.themeBlue;
+            document.getElementById('optThemeRed').textContent = t.themeRed;
+            document.getElementById('optThemeGreen').textContent = t.themeGreen;
+            document.getElementById('optThemePurple').textContent = t.themePurple;
+            document.getElementById('optThemePink').textContent = t.themePink;
+            document.getElementById('optThemeYellow').textContent = t.themeYellow;
+
+            document.getElementById('lblFont').textContent = t.lblFont;
+            document.getElementById('optFontInter').textContent = t.fontInter;
+            document.getElementById('optFontSys').textContent = t.fontSys;
+            document.getElementById('optFontSport').textContent = t.fontSport;
+            document.getElementById('optFontMono').textContent = t.fontMono;
+            document.getElementById('optFontSerif').textContent = t.fontSerif;
 
             document.getElementById('lblLayout').textContent = t.lblLayout;
+            document.getElementById('optLayBot3').textContent = t.layBot3;
             document.getElementById('optLayBot2').textContent = t.layBot2;
             document.getElementById('optLayBot1').textContent = t.layBot1;
+            document.getElementById('optLayTop3').textContent = t.layTop3;
             document.getElementById('optLayTop2').textContent = t.layTop2;
             document.getElementById('optLayTop1').textContent = t.layTop1;
+            document.getElementById('optLayOverBot').textContent = t.layOverBot;
+            document.getElementById('optLayOverCen').textContent = t.layOverCen;
+            document.getElementById('optLayOverTop').textContent = t.layOverTop;
 
             document.getElementById('lblColor').textContent = t.lblColor;
             document.getElementById('optColorWhite').textContent = t.colorWhite;
             document.getElementById('optColorBlack').textContent = t.colorBlack;
 
             document.getElementById('headProportions').textContent = t.proportions;
+            document.getElementById('lblShowMap').textContent = t.lblShowMap;
             document.getElementById('lblScaleTxt').textContent = t.lblScale;
             document.getElementById('lblWidthTxt').textContent = t.lblWidth;
             document.getElementById('lblSizeTxt').textContent = t.lblSize;
@@ -660,6 +967,7 @@
             document.getElementById('optTypeRun').textContent = t.typeRun;
 
             document.getElementById('lblData').textContent = t.lblData;
+            document.getElementById('randomBtn').textContent = t.randomBtn;
             document.getElementById('downloadBtn').textContent = t.downloadBtn;
 
             drawMiniExample();
@@ -809,15 +1117,18 @@
             const lang = languageSelect.value;
             const t = i18n[lang];
             const theme = themes[themeSelect.value];
+            const selectedFont = fonts[fontSelect.value];
             const layout = layoutSelect.value;
             const isWhiteText = textColorSelect.value === 'white';
             const isRun = activitySelect.value === 'run';
+            const showMap = cbShowMap.checked;
+
             const fontSize = parseInt(textSizeSlider.value);
             const lineWidth = parseInt(lineWidthSlider.value);
             const routeScale = parseInt(routeScaleSlider.value) / 100;
 
-            const currentTextColor = isWhiteText ? '#ffffff' : theme.text;
-            const currentSubTextColor = isWhiteText ? '#cccccc' : theme.subtext;
+            const currentTextColor = isWhiteText ? '#ffffff' : '#121212';
+            const currentSubTextColor = isWhiteText ? '#EEEEEE' : '#333333';
 
             let displayLines = [];
 
@@ -847,91 +1158,153 @@
                 displayLines.push({ val: `${extractedStats.calories} kcal`, desc: t.statCal });
             }
 
+            const isOverlay = layout.includes('overlay');
+            const isCenteredOverlay = layout === 'overlay_1';
+            let cols = 1;
+
+            if (layout.includes('3') || (isOverlay && !isCenteredOverlay)) cols = 3;
+            if (layout.includes('2')) cols = 2;
+
             const padding = 80;
-            const mapAreaSize = 1080 * routeScale;
+            const mapAreaSize = showMap ? 1080 * routeScale : 0;
+            const innerGap = (showMap && displayLines.length > 0 && !isOverlay) ? (mapAreaSize * 0.08) : 0;
 
-            let textHeight = padding;
-            const rowHeight2Col = fontSize * 2.2;
             const rowHeight1Col = fontSize * 2.5;
+            const rowHeightMultCol = fontSize * 2.2;
 
-            if (layout.includes('2')) {
-                if (displayLines.length > 0) textHeight += rowHeight1Col;
-                let subLines = Math.max(0, displayLines.length - 1);
-                textHeight += Math.ceil(subLines / 2) * rowHeight2Col;
-            } else {
-                textHeight += displayLines.length * rowHeight1Col;
+            let actualTextHeight = 0;
+            if (displayLines.length > 0) {
+                if (cols === 1) {
+                    actualTextHeight = displayLines.length * rowHeight1Col;
+                } else if (cols === 2) {
+                    actualTextHeight = rowHeight1Col + Math.ceil(Math.max(0, displayLines.length - 1) / 2) * rowHeightMultCol;
+                } else if (cols === 3) {
+                    actualTextHeight = Math.ceil(displayLines.length / 3) * rowHeightMultCol;
+                }
             }
-            textHeight += padding;
+
+            const canvasTextHeight = (isOverlay || displayLines.length === 0) ? 0 : actualTextHeight;
 
             canvas.width = 1080;
-            canvas.height = mapAreaSize + (displayLines.length > 0 ? textHeight : 0);
+
+            let totalHeight = padding * 2;
+            if (showMap) totalHeight += mapAreaSize;
+            if (displayLines.length > 0) totalHeight += canvasTextHeight;
+            if (showMap && displayLines.length > 0 && !isOverlay) totalHeight += innerGap;
+
+            canvas.height = totalHeight;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const mapStartY = layout.includes('oben') && displayLines.length > 0 ? textHeight : 0;
-            const textStartY = layout.includes('oben') ? 0 : mapAreaSize;
+            let mapStartY = padding;
+            let textStartY = padding;
 
-            let minLat = globalCoords[0].lat, maxLat = globalCoords[0].lat;
-            let minLon = globalCoords[0].lon, maxLon = globalCoords[0].lon;
+            if (!isOverlay) {
+                if (layout.includes('oben')) {
+                    textStartY = padding;
+                    mapStartY = padding + canvasTextHeight + innerGap;
+                } else {
+                    mapStartY = padding;
+                    textStartY = padding + mapAreaSize + innerGap;
+                }
+            } else {
+                mapStartY = padding;
+                if (layout === 'overlay_unten') {
+                    textStartY = padding + mapAreaSize - actualTextHeight;
+                } else if (layout === 'overlay_1') {
+                    textStartY = padding + (mapAreaSize - actualTextHeight) / 2;
+                } else {
+                    textStartY = padding;
+                }
+            }
 
-            globalCoords.forEach(c => {
-                if (c.lat < minLat) minLat = c.lat;
-                if (c.lat > maxLat) maxLat = c.lat;
-                if (c.lon < minLon) minLon = c.lon;
-                if (c.lon > maxLon) maxLon = c.lon;
-            });
+            if (showMap) {
+                let minLat = globalCoords[0].lat, maxLat = globalCoords[0].lat;
+                let minLon = globalCoords[0].lon, maxLon = globalCoords[0].lon;
 
-            const mapAreaXStart = (1080 - mapAreaSize) / 2;
-            const mapAreaYStart = mapStartY;
-            const mapAreaYEnd = mapStartY + mapAreaSize;
+                globalCoords.forEach(c => {
+                    if (c.lat < minLat) minLat = c.lat;
+                    if (c.lat > maxLat) maxLat = c.lat;
+                    if (c.lon < minLon) minLon = c.lon;
+                    if (c.lon > maxLon) maxLon = c.lon;
+                });
 
-            const lonDiff = maxLon - minLon;
-            const latDiff = maxLat - minLat;
+                const mapAreaXStart = (1080 - mapAreaSize) / 2;
+                const mapAreaYEnd = mapStartY + mapAreaSize;
 
-            const strokePadding = lineWidth + 10;
-            const mapDrawWidth = mapAreaSize - 2 * strokePadding;
-            const mapDrawHeight = mapAreaSize - 2 * strokePadding;
+                const lonDiff = maxLon - minLon;
+                const latDiff = maxLat - minLat;
 
-            const scaleX = mapDrawWidth / lonDiff;
-            const scaleY = mapDrawHeight / latDiff;
-            const scale = Math.min(scaleX, scaleY);
+                const strokePadding = lineWidth + 10;
+                const mapDrawWidth = mapAreaSize - 2 * strokePadding;
+                const mapDrawHeight = mapAreaSize - 2 * strokePadding;
 
-            const offsetX = (mapAreaSize - (lonDiff * scale)) / 2;
-            const offsetY = (mapAreaSize - (latDiff * scale)) / 2;
+                const scaleX = mapDrawWidth / lonDiff;
+                const scaleY = mapDrawHeight / latDiff;
+                const scale = Math.min(scaleX, scaleY);
 
-            ctx.beginPath();
-            ctx.strokeStyle = theme.line;
-            ctx.lineWidth = lineWidth;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
+                const offsetX = (mapAreaSize - (lonDiff * scale)) / 2;
+                const offsetY = (mapAreaSize - (latDiff * scale)) / 2;
 
-            globalCoords.forEach((c, index) => {
-                const x = mapAreaXStart + offsetX + (c.lon - minLon) * scale;
-                const y = mapAreaYEnd - offsetY - (c.lat - minLat) * scale;
+                ctx.beginPath();
+                ctx.strokeStyle = theme.line;
+                ctx.lineWidth = lineWidth;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
 
-                if (index === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            });
-            ctx.stroke();
+                globalCoords.forEach((c, index) => {
+                    const x = mapAreaXStart + offsetX + (c.lon - minLon) * scale;
+                    const y = mapAreaYEnd - offsetY - (c.lat - minLat) * scale;
+
+                    if (index === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+            }
 
             if (displayLines.length === 0) return;
 
-            let currentY = textStartY + padding;
+            let currentY = textStartY;
 
-            if (layout.includes('2')) {
-                if (displayLines.length > 0) {
-                    const mainLine = displayLines[0];
-                    ctx.textAlign = "left";
+            if (cols === 3) {
+                let colIdx = 0;
+                for (let i = 0; i < displayLines.length; i++) {
+                    const line = displayLines[i];
+                    let xPos, align;
+
+                    if (colIdx === 0) { xPos = padding; align = "left"; }
+                    else if (colIdx === 1) { xPos = 1080 / 2; align = "center"; }
+                    else { xPos = 1080 - padding; align = "right"; }
+
+                    ctx.textAlign = align;
                     ctx.fillStyle = currentSubTextColor;
-                    ctx.font = `normal ${fontSize * 0.7}px ${theme.font}`;
-                    ctx.fillText(mainLine.desc, padding, currentY + fontSize * 0.7);
+                    ctx.font = `500 ${fontSize * 0.6}px ${selectedFont}`;
+                    ctx.fillText(line.desc, xPos, currentY + fontSize * 0.6);
 
                     ctx.fillStyle = currentTextColor;
-                    ctx.font = `bold ${fontSize * 1.8}px ${theme.font}`;
-                    ctx.fillText(mainLine.val, padding, currentY + fontSize * 2.3);
+                    ctx.font = `700 ${fontSize * 1.1}px ${selectedFont}`;
+                    ctx.fillText(line.val, xPos, currentY + fontSize * 1.7);
 
-                    currentY += rowHeight1Col + padding * 0.5;
+                    colIdx++;
+                    if (colIdx > 2) {
+                        colIdx = 0;
+                        currentY += rowHeightMultCol;
+                    }
                 }
+                ctx.textAlign = "left";
+
+            } else if (cols === 2) {
+                const mainLine = displayLines[0];
+                ctx.textAlign = "left";
+                ctx.fillStyle = currentSubTextColor;
+                ctx.font = `500 ${fontSize * 0.7}px ${selectedFont}`;
+                ctx.fillText(mainLine.desc, padding, currentY + fontSize * 0.7);
+
+                ctx.fillStyle = currentTextColor;
+                ctx.font = `700 ${fontSize * 1.8}px ${selectedFont}`;
+                ctx.fillText(mainLine.val, padding, currentY + fontSize * 2.3);
+
+                currentY += rowHeight1Col + padding * 0.5;
 
                 let colIdx = 0;
                 for (let i = 1; i < displayLines.length; i++) {
@@ -940,17 +1313,17 @@
 
                     ctx.textAlign = "left";
                     ctx.fillStyle = currentSubTextColor;
-                    ctx.font = `normal ${fontSize * 0.6}px ${theme.font}`;
+                    ctx.font = `500 ${fontSize * 0.6}px ${selectedFont}`;
                     ctx.fillText(line.desc, xPos, currentY + fontSize * 0.6);
 
                     ctx.fillStyle = currentTextColor;
-                    ctx.font = `bold ${fontSize * 1.1}px ${theme.font}`;
+                    ctx.font = `700 ${fontSize * 1.1}px ${selectedFont}`;
                     ctx.fillText(line.val, xPos, currentY + fontSize * 1.7);
 
                     colIdx++;
                     if (colIdx > 1) {
                         colIdx = 0;
-                        currentY += rowHeight2Col;
+                        currentY += rowHeightMultCol;
                     }
                 }
             } else {
@@ -960,11 +1333,11 @@
                     const xPos = 1080 / 2;
 
                     ctx.fillStyle = currentSubTextColor;
-                    ctx.font = `normal ${fontSize * 0.7}px ${theme.font}`;
+                    ctx.font = `500 ${fontSize * 0.7}px ${selectedFont}`;
                     ctx.fillText(line.desc, xPos, currentY + fontSize * 0.7);
 
                     ctx.fillStyle = currentTextColor;
-                    ctx.font = `bold ${fontSize * 1.5}px ${theme.font}`;
+                    ctx.font = `700 ${fontSize * 1.5}px ${selectedFont}`;
                     ctx.fillText(line.val, xPos, currentY + fontSize * 2.1);
 
                     currentY += rowHeight1Col;
@@ -982,6 +1355,7 @@
 
         // Initialize UI
         updateLanguageUI();
+        updateOverlayOptions();
     </script>
 </body>
 
